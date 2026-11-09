@@ -249,7 +249,7 @@ window.benchWiringMatches=k=>k==="dc"?has("dmm.v","alim.plus")&&has("dmm.com","a
 window.clearBenchWires=()=>{wires=[];pending=null;draw();document.getElementById("benchResultTitle").textContent="Câblage effacé";document.getElementById("benchResult").textContent="Tous les fils ont été supprimés.";};
 window.checkBenchWiring=()=>{const tests=[["Tension continue",window.benchWiringMatches("dc")],["Tension alternative",window.benchWiringMatches("ac")],["Mesure de R1",window.benchWiringMatches("r1")],["Mesure de R2",window.benchWiringMatches("r2")],["Oscilloscope",window.benchWiringMatches("scope")]];const ok=tests.filter(t=>t[1]);document.getElementById("benchResultTitle").textContent=ok.length?"Branchements reconnus : "+ok.length:"Aucun montage complet reconnu";document.getElementById("benchResult").textContent=tests.map(t=>(t[1]?"✓ ":"○ ")+t[0]).join(" · ");};
 window.resetBenchWires=()=>{wires=[];pending=null;draw();};
-window.addEventListener("resize",draw);draw();
+window.addEventListener("resize",draw);new MutationObserver(draw).observe(board,{subtree:true,attributes:true,attributeFilter:["style"]});draw();
 })();
 
 </script></body></html>
