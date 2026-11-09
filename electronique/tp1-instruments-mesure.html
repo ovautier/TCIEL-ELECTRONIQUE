@@ -11,6 +11,32 @@
 @media(max-width:680px){.grid,.scope-controls{grid-template-columns:1fr}.timeline td:first-child{white-space:normal}.wrap{width:min(100% - 22px,1020px)}}
 @media print{body{background:white;font-size:11pt}.hero{background:white;color:#111;padding:8px 0}.hero p,.back,.kicker,.meta,.navchips{display:none}.main{padding:8px 0}.card{box-shadow:none;border:1px solid #aaa;break-inside:avoid;margin-bottom:10px;padding:12px}.teacher,.btn,.progress{display:none!important}.scope-screen{background:#eee;color:#111}.callout{background:white}.field input,.field textarea{border:0;border-bottom:1px solid #999}.footer{display:none}a{color:#111;text-decoration:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+
+/* Banc didactique virtuel */
+.bench{background:#e8eef7;border:2px solid #cbd5e1;border-radius:16px;padding:14px}
+.bench-top{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:10px}
+.bench-board{position:relative;min-height:440px;border:2px solid #94a3b8;border-radius:12px;overflow:hidden;background-color:#f8fafc;background-image:linear-gradient(#dbe4f0 1px,transparent 1px),linear-gradient(90deg,#dbe4f0 1px,transparent 1px);background-size:24px 24px}
+.bench-part{position:absolute;z-index:2;touch-action:none;user-select:none;cursor:grab;box-shadow:0 5px 12px #0f172a22}
+.bench-part:active{cursor:grabbing}
+.bench-resistor{width:126px;padding:10px 8px;background:#fff7d6;border:2px solid #b7791f;border-radius:10px;text-align:center;color:#422006}
+.bench-resistor .zig{font-size:25px;line-height:1.1;font-weight:900;letter-spacing:2px}
+.bench-meter{width:174px;background:#dbeafe;border:2px solid #1d4ed8;border-radius:12px;padding:9px;color:#172554}
+.bench-scope{width:190px;background:#172554;border:2px solid #0f172a;border-radius:12px;padding:9px;color:#d1fae5}
+.bench-source{width:130px;background:#dcfce7;border:2px solid #15803d;border-radius:10px;padding:10px;text-align:center;color:#14532d}
+.bench-display{background:#ecfccb;color:#1a2e05;border:1px solid #84cc16;border-radius:5px;padding:5px;text-align:center;font-weight:900;font-variant-numeric:tabular-nums;margin:6px 0}
+.bench-scope .bench-display{background:#071426;color:#86efac;border-color:#4ade80}
+.bench-knob{font-size:12px;text-align:center;border:1px solid currentColor;border-radius:6px;padding:4px;margin-top:4px}
+.bench-label{font-size:12px;font-weight:850;letter-spacing:.03em}
+.bench-help{font-size:12px;line-height:1.3}
+.bench-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.bench-controls label{display:block;font-weight:700;font-size:.9rem}
+.bench-controls select{width:100%;padding:8px;border:1px solid #94a3b8;border-radius:8px;background:white}
+.bench-status{background:white;border:1px solid #cbd5e1;border-radius:10px;padding:12px;margin-top:10px}
+.bench-status strong{color:#1d4ed8}
+.bench-board-hint{position:absolute;right:10px;bottom:8px;color:#64748b;font-size:11px;pointer-events:none}
+@media(max-width:680px){.bench-controls{grid-template-columns:1fr}.bench-board{min-height:560px}.bench-meter{width:158px}.bench-scope{width:170px}}
+@media print{.bench{display:none}}
+
 </style>
 </head>
 <body>
@@ -20,7 +46,7 @@
 <h1>TP 1 – Prise en main des instruments de mesure</h1>
 <p>Choisir, brancher et régler les instruments pour mesurer une grandeur électrique et observer un signal.</p>
 <div class="meta"><span class="pill">⏱ 2 heures</span><span class="pill">Banc didactique</span><span class="pill">Progression guidée</span><span class="pill">TP interactif</span></div>
-<nav class="navchips" aria-label="Navigation dans le TP"><a href="#mission">Mission</a><a href="#securite">Sécurité</a><a href="#multimetre">Multimètre</a><a href="#oscillo">Oscilloscope</a><a href="#exercices">Exercices</a><a href="#compterendu">Compte rendu</a></nav>
+<nav class="navchips" aria-label="Navigation dans le TP"><a href="#mission">Mission</a><a href="#bancvirtuel">Banc virtuel</a><a href="#securite">Sécurité</a><a href="#multimetre">Multimètre</a><a href="#oscillo">Oscilloscope</a><a href="#exercices">Exercices</a><a href="#compterendu">Compte rendu</a></nav>
 </div></header>
 <main class="wrap main">
 <div class="callout success"><strong>Objectif du TP :</strong> à la fin des 2 heures, vous devez être capable de choisir le bon instrument, réaliser une mesure fiable et présenter un résultat avec son unité et ses conditions de mesure.</div>
@@ -43,6 +69,30 @@
 <tr><td>95–110 min</td><td>Exercices interactifs et défi individuel</td><td>Réponses validées et erreurs comprises</td></tr>
 <tr><td>110–120 min</td><td>Compte rendu, bilan et rangement</td><td>Fiche renseignée et poste rangé</td></tr>
 </tbody></table></div></section>
+
+<section class="card" id="bancvirtuel"><h2>3. Banc didactique virtuel – déplacer et mesurer</h2>
+<p>Manipule les éléments comme sur un vrai poste : <strong>maintiens le doigt ou le bouton de la souris</strong> sur un appareil ou une résistance, puis fais-le glisser sur le plan de travail. Tu peux déplacer chaque élément autant de fois que nécessaire. Les mesures sont simulées à partir du circuit pédagogique proposé.</p>
+<div class="callout warning"><strong>Important :</strong> ce banc virtuel sert à s'entraîner au placement des appareils et au choix des fonctions. Il ne remplace pas les branchements réels ni les contrôles de sécurité sur le banc physique.</div>
+<div class="bench">
+<div class="bench-top"><strong>🔧 Plan de travail – circuit basse tension isolé</strong><button type="button" class="btn secondary" onclick="resetBench()">Réinitialiser le banc</button></div>
+<div class="bench-board" id="benchBoard" aria-label="Plan de travail virtuel. Les appareils et composants peuvent être déplacés.">
+<div class="bench-part bench-source" data-part="alim" style="left:3%;top:7%" tabindex="0" aria-label="Alimentation continue virtuelle, déplaçable"><div class="bench-label">ALIMENTATION</div><div class="bench-display">5,00 V ⎓</div><div class="bench-help">Sortie isolée<br>+5 V / 0 V</div></div>
+<div class="bench-part bench-resistor" data-part="r1" style="left:28%;top:10%" tabindex="0" aria-label="Résistance R1, déplaçable"><div class="bench-label">R1 – RÉSISTANCE</div><div class="zig">─▱─</div><strong>1,0 kΩ</strong><div class="bench-help">Tolérance ±5 %</div></div>
+<div class="bench-part bench-resistor" data-part="r2" style="left:48%;top:10%" tabindex="0" aria-label="Résistance R2, déplaçable"><div class="bench-label">R2 – RÉSISTANCE</div><div class="zig">─▱─</div><strong>2,2 kΩ</strong><div class="bench-help">Tolérance ±5 %</div></div>
+<div class="bench-part bench-meter" data-part="dmm" style="left:5%;top:52%" tabindex="0" aria-label="Multimètre virtuel, déplaçable"><div class="bench-label">MULTIMÈTRE NUMÉRIQUE</div><div class="bench-display" id="benchMeterDisplay">— — —</div><div class="bench-help">COM ● &nbsp; V / Ω ●</div><div class="bench-knob">Sélecteur : <span id="benchModeLabel">V⎓</span></div></div>
+<div class="bench-part bench-scope" data-part="scope" style="left:58%;top:52%" tabindex="0" aria-label="Oscilloscope virtuel, déplaçable"><div class="bench-label">OSCILLOSCOPE</div><div class="bench-display" id="benchScopeDisplay">1,00 kHz</div><div class="bench-help">CH1 · 2,0 Vpp · signal simulé</div><div class="bench-knob">V/div · s/div</div></div>
+<div class="bench-board-hint">Zone de manipulation : déplacer les appareils et composants</div>
+</div>
+<div class="bench-controls">
+<div><label for="benchMode">Fonction du multimètre</label><select id="benchMode"><option value="dc">Tension continue V⎓</option><option value="ac">Tension alternative V~</option><option value="ohm">Résistance Ω</option><option value="cont">Continuité</option></select></div>
+<div><label for="benchTarget">Point / composant mesuré</label><select id="benchTarget"><option value="source">Sortie alimentation (+ / 0 V)</option><option value="r1">Résistance R1 (hors tension)</option><option value="r2">Résistance R2 (hors tension)</option><option value="series">Ensemble R1 + R2 (hors tension)</option><option value="acsource">Sortie alternative isolée</option><option value="wire">Conducteur de test</option></select></div>
+<div><label for="benchScopeSignal">Signal observé à l'oscilloscope</label><select id="benchScopeSignal"><option value="sine">Sinusoïde – 1 kHz – 2 Vpp</option><option value="square">Créneau – 500 Hz – 5 Vpp</option></select></div>
+</div>
+<div class="bench-status" aria-live="polite"><strong id="benchResultTitle">Prêt à mesurer</strong><div id="benchResult">Choisis la fonction du multimètre et le composant à contrôler, puis valide la mesure.</div><button type="button" class="btn" style="margin-top:9px" onclick="runBenchMeasure()">Effectuer la mesure</button> <button type="button" class="btn secondary" style="margin-top:9px" onclick="runBenchScope()">Observer le signal</button></div>
+<p class="small muted">Valeurs pédagogiques du modèle : alimentation continue 5,00 V ; R1 = 1,0 kΩ ; R2 = 2,2 kΩ ; sortie alternative isolée = 6,0 V efficaces / 50 Hz. Les positions des éléments sont libres et ne modifient pas les valeurs électriques du modèle.</p>
+</div>
+</section>
+
 <section class="card" id="multimetre"><h2>4. Activité A – Utiliser le multimètre</h2>
 <p>Sur le banc, repérez les points de test désignés par l'enseignant. Les valeurs proposées ci-dessous constituent un <strong>jeu de données d'entraînement</strong> : les mesures réelles doivent être prises sur votre banc et comparées à sa notice.</p>
 <h3>A1 – Mesurer une tension continue (V⎓)</h3>
@@ -107,4 +157,69 @@ function resetQuiz(){setTimeout(()=>{document.getElementById("quizResult").hidde
 function updateScope(){const v=Number(document.getElementById("vdiv").value),t=Number(document.getElementById("tdiv").value);document.getElementById("vdivOut").textContent=v.toFixed(1).replace(".",",")+" V/div";document.getElementById("tdivOut").textContent=t.toFixed(1).replace(".",",")+" ms/div";const vh=2/v;const th=1/t;document.getElementById("vdivs").textContent=vh.toFixed(1).replace(".",",")+" divisions crête-à-crête";document.getElementById("tdivs").textContent=th.toFixed(1).replace(".",",")+" divisions";document.getElementById("scopeAdvice").textContent=vh>8?"Le signal dépasse la hauteur disponible : augmenter V/div.":vh<2?"Le signal est peu haut : diminuer V/div pour mieux le lire.":th>10?"La période dépasse la largeur affichée : augmenter ms/div.":th<1?"La période est peu visible : diminuer ms/div.":"Le signal tient correctement dans la zone d'affichage.";const pts=[];for(let x=30;x<=670;x+=2){const y=115-((2/v)/2*25)*Math.sin((x-30)/640*10*Math.PI);pts.push((x===30?"M":"L")+x.toFixed(1)+" "+y.toFixed(1));}document.getElementById("wave").setAttribute("d",pts.join(" "));}
 document.getElementById("vdiv").addEventListener("input",updateScope);document.getElementById("tdiv").addEventListener("input",updateScope);updateScope();
 function clearReport(){if(confirm("Effacer les informations saisies dans le compte rendu ?")){document.querySelectorAll("#compterendu input,#compterendu textarea").forEach(e=>e.value="");}}
+
+/* Banc virtuel déplaçable */
+(function(){
+const board=document.getElementById("benchBoard");
+if(!board)return;
+let drag=null;
+const initial={alim:[3,7],r1:[28,10],r2:[48,10],dmm:[5,52],scope:[58,52]};
+board.querySelectorAll(".bench-part").forEach(el=>{
+el.addEventListener("pointerdown",e=>{
+if(e.target.closest("select,button"))return;
+const rect=board.getBoundingClientRect(),r=el.getBoundingClientRect();
+drag={el,dx:e.clientX-r.left,dy:e.clientY-r.top};
+el.setPointerCapture(e.pointerId);
+e.preventDefault();
+});
+el.addEventListener("pointermove",e=>{
+if(!drag||drag.el!==el)return;
+const b=board.getBoundingClientRect();
+const x=Math.max(0,Math.min(b.width-el.offsetWidth,e.clientX-b.left-drag.dx));
+const y=Math.max(0,Math.min(b.height-el.offsetHeight,e.clientY-b.top-drag.dy));
+el.style.left=x+"px";el.style.top=y+"px";
+});
+const end=()=>{if(drag&&drag.el===el)drag=null};
+el.addEventListener("pointerup",end);el.addEventListener("pointercancel",end);
+el.addEventListener("keydown",e=>{
+if(!["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))return;
+e.preventDefault();const step=12, b=board.getBoundingClientRect();
+let x=el.offsetLeft,y=el.offsetTop;
+if(e.key==="ArrowUp")y-=step;if(e.key==="ArrowDown")y+=step;if(e.key==="ArrowLeft")x-=step;if(e.key==="ArrowRight")x+=step;
+el.style.left=Math.max(0,Math.min(b.width-el.offsetWidth,x))+"px";
+el.style.top=Math.max(0,Math.min(b.height-el.offsetHeight,y))+"px";
+});
+});
+const mode=document.getElementById("benchMode"),target=document.getElementById("benchTarget");
+mode.addEventListener("change",()=>{document.getElementById("benchModeLabel").textContent=({dc:"V⎓",ac:"V~",ohm:"Ω",cont:"🔔"})[mode.value]});
+window.runBenchMeasure=function(){
+const m=mode.value,t=target.value;let value="",detail="",valid=true;
+if(m==="dc"&&t==="source"){value="5,00 V";detail="Tension continue mesurée en dérivation aux bornes de la sortie +5 V / 0 V."}
+else if(m==="ac"&&t==="acsource"){value="6,00 V~";detail="Valeur efficace de la sortie alternative isolée (50 Hz)."}
+else if(m==="ohm"&&t==="r1"){value="1,00 kΩ";detail="Mesure de R1 hors tension. Valeur nominale : 1,0 kΩ."}
+else if(m==="ohm"&&t==="r2"){value="2,20 kΩ";detail="Mesure de R2 hors tension. Valeur nominale : 2,2 kΩ."}
+else if(m==="ohm"&&t==="series"){value="3,20 kΩ";detail="Résistances en série : R1 + R2 = 1,0 + 2,2 = 3,2 kΩ. Circuit hors tension."}
+else if(m==="cont"&&t==="wire"){value="0,3 Ω · BIP";detail="Le conducteur de test est passant. Le seuil de bip dépend du multimètre réel."}
+else{valid=false;detail=m==="ohm"?"Pour mesurer une résistance, sélectionne R1, R2 ou leur association, hors tension.":m==="cont"?"Le test de continuité doit porter sur le conducteur prévu et hors tension.":m==="ac"?"Sélectionne la sortie alternative isolée et le mode V~.":"Sélectionne la sortie continue et le mode V⎓."}
+document.getElementById("benchMeterDisplay").textContent=valid?value:"ERREUR";
+document.getElementById("benchResultTitle").textContent=valid?"Mesure simulée : "+value:"Association mode / point incorrecte";
+document.getElementById("benchResult").textContent=detail;
+document.getElementById("benchResultTitle").style.color=valid?"#15803d":"#b91c1c";
+};
+window.runBenchScope=function(){
+const s=document.getElementById("benchScopeSignal").value;
+const val=s==="sine"?"1,00 kHz · 2,0 Vpp":"500 Hz · 5,0 Vpp";
+document.getElementById("benchScopeDisplay").textContent=val;
+document.getElementById("benchResultTitle").textContent="Oscilloscope virtuel : "+val;
+document.getElementById("benchResult").textContent=s==="sine"?"Signal sinusoïdal : période T = 1 ms et amplitude crête-à-crête de 2 V.":"Signal carré : période T = 2 ms et amplitude crête-à-crête de 5 V.";
+document.getElementById("benchResultTitle").style.color="#1d4ed8";
+};
+window.resetBench=function(){
+board.querySelectorAll(".bench-part").forEach(el=>{const p=initial[el.dataset.part];el.style.left=p[0]+"%";el.style.top=p[1]+"%"});
+document.getElementById("benchMeterDisplay").textContent="— — —";
+document.getElementById("benchResultTitle").textContent="Banc réinitialisé";
+document.getElementById("benchResult").textContent="Les appareils et composants ont retrouvé leur position initiale.";
+};
+})();
+
 </script></body></html>
