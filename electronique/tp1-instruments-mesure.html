@@ -37,6 +37,20 @@
 @media(max-width:680px){.bench-controls{grid-template-columns:1fr}.bench-board{min-height:560px}.bench-meter{width:158px}.bench-scope{width:170px}}
 @media print{.bench{display:none}}
 
+
+.bench-wires{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible;pointer-events:none}
+.bench-wire{fill:none;stroke:#dc2626;stroke-width:4;stroke-linecap:round;pointer-events:stroke;cursor:pointer;filter:drop-shadow(0 1px 1px #64748b)}
+.bench-wire:hover{stroke:#f59e0b;stroke-width:6}
+.bench-port{position:absolute;z-index:4;width:19px;height:19px;border:3px solid white;border-radius:50%;padding:0;box-shadow:0 0 0 2px #334155;cursor:crosshair;touch-action:none}
+.bench-port:focus{outline:3px solid #f59e0b;outline-offset:3px}
+.bench-port.left{left:-7px;top:50%;transform:translateY(-50%)}
+.bench-port.right{right:-7px;top:50%;transform:translateY(-50%)}
+.bench-port.red{background:#dc2626}.bench-port.black{background:#111827}.bench-port.green{background:#16a34a}.bench-port.yellow{background:#eab308}
+.bench-port-label{position:absolute;z-index:4;font-size:10px;font-weight:900;color:#0f172a;background:#fff;border-radius:4px;padding:1px 3px;white-space:nowrap;pointer-events:none}
+.bench-part .bench-port-label.left{left:12px;top:calc(50% + 11px)}.bench-part .bench-port-label.right{right:12px;top:calc(50% + 11px)}
+.bench-wire-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.bench-port-hint{font-size:.88rem;color:#475569;margin:8px 0}
+@media print{.bench{display:none}}
 </style>
 </head>
 <body>
@@ -76,14 +90,14 @@
 <div class="bench">
 <div class="bench-top"><strong>🔧 Plan de travail – circuit basse tension isolé</strong><button type="button" class="btn secondary" onclick="resetBench()">Réinitialiser le banc</button></div>
 <div class="bench-board" id="benchBoard" aria-label="Plan de travail virtuel. Les appareils et composants peuvent être déplacés.">
-<div class="bench-part bench-source" data-part="alim" style="left:3%;top:7%" tabindex="0" aria-label="Alimentation continue virtuelle, déplaçable"><div class="bench-label">ALIMENTATION</div><div class="bench-display">5,00 V ⎓</div><div class="bench-help">Sortie isolée<br>+5 V / 0 V</div></div>
-<div class="bench-part bench-resistor" data-part="r1" style="left:28%;top:10%" tabindex="0" aria-label="Résistance R1, déplaçable"><div class="bench-label">R1 – RÉSISTANCE</div><div class="zig">─▱─</div><strong>1,0 kΩ</strong><div class="bench-help">Tolérance ±5 %</div></div>
+<svg class="bench-wires" id="benchWires" aria-label="Fils virtuels"></svg><div class="bench-part bench-source" data-part="alim" style="left:3%;top:7%" tabindex="0" aria-label="Alimentation continue virtuelle, déplaçable"><div class="bench-label">ALIMENTATION</div><div class="bench-display">5,00 V ⎓</div><div class="bench-help">Sortie isolée<br>+5 V / 0 V</div></div>
+<div class="bench-part bench-source" data-part="generator" style="left:77%;top:8%" tabindex="0" aria-label="Générateur BF déplaçable"><div class="bench-label">GÉNÉRATEUR BF</div><div class="bench-display">6,0 V~</div><div class="bench-help">50 Hz · sortie isolée</div></div><div class="bench-part bench-resistor" data-part="r1" style="left:28%;top:10%" tabindex="0" aria-label="Résistance R1, déplaçable"><div class="bench-label">R1 – RÉSISTANCE</div><div class="zig">─▱─</div><strong>1,0 kΩ</strong><div class="bench-help">Tolérance ±5 %</div></div>
 <div class="bench-part bench-resistor" data-part="r2" style="left:48%;top:10%" tabindex="0" aria-label="Résistance R2, déplaçable"><div class="bench-label">R2 – RÉSISTANCE</div><div class="zig">─▱─</div><strong>2,2 kΩ</strong><div class="bench-help">Tolérance ±5 %</div></div>
 <div class="bench-part bench-meter" data-part="dmm" style="left:5%;top:52%" tabindex="0" aria-label="Multimètre virtuel, déplaçable"><div class="bench-label">MULTIMÈTRE NUMÉRIQUE</div><div class="bench-display" id="benchMeterDisplay">— — —</div><div class="bench-help">COM ● &nbsp; V / Ω ●</div><div class="bench-knob">Sélecteur : <span id="benchModeLabel">V⎓</span></div></div>
 <div class="bench-part bench-scope" data-part="scope" style="left:58%;top:52%" tabindex="0" aria-label="Oscilloscope virtuel, déplaçable"><div class="bench-label">OSCILLOSCOPE</div><div class="bench-display" id="benchScopeDisplay">1,00 kHz</div><div class="bench-help">CH1 · 2,0 Vpp · signal simulé</div><div class="bench-knob">V/div · s/div</div></div>
 <div class="bench-board-hint">Zone de manipulation : déplacer les appareils et composants</div>
 </div>
-<div class="bench-controls">
+<p class="bench-port-hint"><strong>Créer un fil :</strong> clique sur une borne colorée, puis sur une autre borne. Clique sur un fil pour le supprimer. Les fils suivent les appareils déplacés.</p><div class="bench-wire-tools"><button type="button" class="btn secondary" onclick="clearBenchWires()">Effacer tous les fils</button><button type="button" class="btn secondary" onclick="checkBenchWiring()">Vérifier les branchements</button></div><div class="bench-controls">
 <div><label for="benchMode">Fonction du multimètre</label><select id="benchMode"><option value="dc">Tension continue V⎓</option><option value="ac">Tension alternative V~</option><option value="ohm">Résistance Ω</option><option value="cont">Continuité</option></select></div>
 <div><label for="benchTarget">Point / composant mesuré</label><select id="benchTarget"><option value="source">Sortie alimentation (+ / 0 V)</option><option value="r1">Résistance R1 (hors tension)</option><option value="r2">Résistance R2 (hors tension)</option><option value="series">Ensemble R1 + R2 (hors tension)</option><option value="acsource">Sortie alternative isolée</option><option value="wire">Conducteur de test</option></select></div>
 <div><label for="benchScopeSignal">Signal observé à l'oscilloscope</label><select id="benchScopeSignal"><option value="sine">Sinusoïde – 1 kHz – 2 Vpp</option><option value="square">Créneau – 500 Hz – 5 Vpp</option></select></div>
@@ -163,7 +177,7 @@ function clearReport(){if(confirm("Effacer les informations saisies dans le comp
 const board=document.getElementById("benchBoard");
 if(!board)return;
 let drag=null;
-const initial={alim:[3,7],r1:[28,10],r2:[48,10],dmm:[5,52],scope:[58,52]};
+const initial={alim:[3,7],r1:[28,10],r2:[48,10],dmm:[5,52],scope:[58,52],generator:[77,8]};
 board.querySelectorAll(".bench-part").forEach(el=>{
 el.addEventListener("pointerdown",e=>{
 if(e.target.closest("select,button"))return;
@@ -194,32 +208,48 @@ const mode=document.getElementById("benchMode"),target=document.getElementById("
 mode.addEventListener("change",()=>{document.getElementById("benchModeLabel").textContent=({dc:"V⎓",ac:"V~",ohm:"Ω",cont:"🔔"})[mode.value]});
 window.runBenchMeasure=function(){
 const m=mode.value,t=target.value;let value="",detail="",valid=true;
-if(m==="dc"&&t==="source"){value="5,00 V";detail="Tension continue mesurée en dérivation aux bornes de la sortie +5 V / 0 V."}
-else if(m==="ac"&&t==="acsource"){value="6,00 V~";detail="Valeur efficace de la sortie alternative isolée (50 Hz)."}
-else if(m==="ohm"&&t==="r1"){value="1,00 kΩ";detail="Mesure de R1 hors tension. Valeur nominale : 1,0 kΩ."}
-else if(m==="ohm"&&t==="r2"){value="2,20 kΩ";detail="Mesure de R2 hors tension. Valeur nominale : 2,2 kΩ."}
+if(m==="dc"&&t==="source"&&window.benchWiringMatches("dc")){value="5,00 V";detail="Tension continue mesurée en dérivation aux bornes de la sortie +5 V / 0 V."}
+else if(m==="ac"&&t==="acsource"&&window.benchWiringMatches("ac")){value="6,00 V~";detail="Valeur efficace de la sortie alternative isolée (50 Hz)."}
+else if(m==="ohm"&&t==="r1"&&window.benchWiringMatches("r1")){value="1,00 kΩ";detail="Mesure de R1 hors tension. Valeur nominale : 1,0 kΩ."}
+else if(m==="ohm"&&t==="r2"&&window.benchWiringMatches("r2")){value="2,20 kΩ";detail="Mesure de R2 hors tension. Valeur nominale : 2,2 kΩ."}
 else if(m==="ohm"&&t==="series"){value="3,20 kΩ";detail="Résistances en série : R1 + R2 = 1,0 + 2,2 = 3,2 kΩ. Circuit hors tension."}
 else if(m==="cont"&&t==="wire"){value="0,3 Ω · BIP";detail="Le conducteur de test est passant. Le seuil de bip dépend du multimètre réel."}
 else{valid=false;detail=m==="ohm"?"Pour mesurer une résistance, sélectionne R1, R2 ou leur association, hors tension.":m==="cont"?"Le test de continuité doit porter sur le conducteur prévu et hors tension.":m==="ac"?"Sélectionne la sortie alternative isolée et le mode V~.":"Sélectionne la sortie continue et le mode V⎓."}
 document.getElementById("benchMeterDisplay").textContent=valid?value:"ERREUR";
-document.getElementById("benchResultTitle").textContent=valid?"Mesure simulée : "+value:"Association mode / point incorrecte";
-document.getElementById("benchResult").textContent=detail;
+document.getElementById("benchResultTitle").textContent=valid?"Mesure simulée : "+value:"Branchement ou fonction incorrecte";
+document.getElementById("benchResult").textContent=valid?detail:detail+" Vérifie les deux fils et les bornes choisies.";
 document.getElementById("benchResultTitle").style.color=valid?"#15803d":"#b91c1c";
 };
 window.runBenchScope=function(){
 const s=document.getElementById("benchScopeSignal").value;
 const val=s==="sine"?"1,00 kHz · 2,0 Vpp":"500 Hz · 5,0 Vpp";
 document.getElementById("benchScopeDisplay").textContent=val;
-document.getElementById("benchResultTitle").textContent="Oscilloscope virtuel : "+val;
+const connected=window.benchWiringMatches("scope");document.getElementById("benchResultTitle").textContent=connected?"Oscilloscope virtuel : "+val:"Oscilloscope : branchement incomplet";
 document.getElementById("benchResult").textContent=s==="sine"?"Signal sinusoïdal : période T = 1 ms et amplitude crête-à-crête de 2 V.":"Signal carré : période T = 2 ms et amplitude crête-à-crête de 5 V.";
-document.getElementById("benchResultTitle").style.color="#1d4ed8";
+document.getElementById("benchResultTitle").style.color=connected?"#1d4ed8":"#b91c1c";
 };
 window.resetBench=function(){
-board.querySelectorAll(".bench-part").forEach(el=>{const p=initial[el.dataset.part];el.style.left=p[0]+"%";el.style.top=p[1]+"%"});
+board.querySelectorAll(".bench-part").forEach(el=>{const p=initial[el.dataset.part];el.style.left=p[0]+"%";el.style.top=p[1]+"%"});if(window.resetBenchWires)window.resetBenchWires();
 document.getElementById("benchMeterDisplay").textContent="— — —";
 document.getElementById("benchResultTitle").textContent="Banc réinitialisé";
 document.getElementById("benchResult").textContent="Les appareils et composants ont retrouvé leur position initiale.";
 };
+})();
+
+
+(function(){
+const board=document.getElementById("benchBoard"),svg=document.getElementById("benchWires");if(!board||!svg)return;
+const defs={alim:[["plus","+","red","left"],["minus","0V","black","right"]],generator:[["sig","SIG","red","left"],["gnd","GND","black","right"]],r1:[["a","A","yellow","left"],["b","B","yellow","right"]],r2:[["a","A","yellow","left"],["b","B","yellow","right"]],dmm:[["com","COM","black","left"],["v","V/Ω","red","right"]],scope:[["ch1","CH1","green","left"],["gnd","GND","black","right"]]};
+let wires=[],pending=null;const ns="http://www.w3.org/2000/svg";
+Object.entries(defs).forEach(([part,ports])=>{const el=board.querySelector('[data-part="'+part+'"]');ports.forEach(([id,label,color,pos])=>{const p=document.createElement("button");p.type="button";p.className="bench-port "+color+" "+pos;p.dataset.terminal=part+"."+id;p.title=label;p.setAttribute("aria-label","Borne "+label+" de "+part);el.appendChild(p);p.addEventListener("click",()=>{const term=p.dataset.terminal;if(!pending){pending=term;document.getElementById("benchResultTitle").textContent="Départ du fil : "+label;document.getElementById("benchResult").textContent="Clique sur une autre borne pour terminer le fil.";}else if(pending!==term){if(!wires.some(w=>(w[0]===pending&&w[1]===term)||(w[1]===pending&&w[0]===term)))wires.push([pending,term]);pending=null;document.getElementById("benchResultTitle").textContent="Fil connecté";document.getElementById("benchResult").textContent="Connexion ajoutée. Déplace les appareils : le fil suit les bornes.";}else pending=null;draw();});});});
+function xy(id){const p=board.querySelector('[data-terminal="'+id+'"]'),a=p.getBoundingClientRect(),b=board.getBoundingClientRect();return{x:a.left-b.left+a.width/2,y:a.top-b.top+a.height/2};}
+function draw(){const b=board.getBoundingClientRect();svg.setAttribute("viewBox","0 0 "+b.width+" "+b.height);svg.innerHTML="";wires.forEach((w,i)=>{const a=xy(w[0]),z=xy(w[1]),line=document.createElementNS(ns,"line");line.setAttribute("x1",a.x);line.setAttribute("y1",a.y);line.setAttribute("x2",z.x);line.setAttribute("y2",z.y);line.setAttribute("class","bench-wire");line.addEventListener("click",()=>{wires.splice(i,1);draw();});svg.appendChild(line);});}
+const has=(a,b)=>wires.some(w=>(w[0]===a&&w[1]===b)||(w[0]===b&&w[1]===a));
+window.benchWiringMatches=k=>k==="dc"?has("dmm.v","alim.plus")&&has("dmm.com","alim.minus"):k==="ac"?has("dmm.v","generator.sig")&&has("dmm.com","generator.gnd"):k==="r1"?(has("dmm.v","r1.a")&&has("dmm.com","r1.b"))||(has("dmm.v","r1.b")&&has("dmm.com","r1.a")):k==="r2"?(has("dmm.v","r2.a")&&has("dmm.com","r2.b"))||(has("dmm.v","r2.b")&&has("dmm.com","r2.a")):k==="scope"&&has("scope.ch1","generator.sig")&&has("scope.gnd","generator.gnd");
+window.clearBenchWires=()=>{wires=[];pending=null;draw();document.getElementById("benchResultTitle").textContent="Câblage effacé";document.getElementById("benchResult").textContent="Tous les fils ont été supprimés.";};
+window.checkBenchWiring=()=>{const tests=[["Tension continue",window.benchWiringMatches("dc")],["Tension alternative",window.benchWiringMatches("ac")],["Mesure de R1",window.benchWiringMatches("r1")],["Mesure de R2",window.benchWiringMatches("r2")],["Oscilloscope",window.benchWiringMatches("scope")]];const ok=tests.filter(t=>t[1]);document.getElementById("benchResultTitle").textContent=ok.length?"Branchements reconnus : "+ok.length:"Aucun montage complet reconnu";document.getElementById("benchResult").textContent=tests.map(t=>(t[1]?"✓ ":"○ ")+t[0]).join(" · ");};
+window.resetBenchWires=()=>{wires=[];pending=null;draw();};
+window.addEventListener("resize",draw);draw();
 })();
 
 </script></body></html>
